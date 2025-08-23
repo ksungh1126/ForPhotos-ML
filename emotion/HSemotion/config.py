@@ -15,10 +15,10 @@ DEFAULT_EMOJI_FILENAMES: Dict[str, str] = {
     "sadness": "sad.png",
     "anger": "angry.png",
     "surprise": "surprise.png",
-    "fear": "fear.png",
     "disgust": "disgust.png",
     "neutral": "neutral.png",
-    "contempt": "contempt.png",
+    # "fear": "fear.png",
+    # "contempt": "contempt.png",
 }
 
 @dataclass

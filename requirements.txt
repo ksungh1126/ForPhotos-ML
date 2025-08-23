@@ -1,16 +1,14 @@
 # Core
-numpy>=1.22
-opencv-python-headless>=4.8.0
-matplotlib>=3.7
-Pillow>=9.0
+pandas>=2.2
+numpy>=1.26
 
-# Deep Learning
-# PyTorch는 CUDA 환경에 맞는 버전으로 설치 권장 (여기선 범위만 명시)
-torch>=2.1
-torchvision>=0.16
+# Image I/O & processing
+Pillow>=10.0
+opencv-python-headless>=4.9
 
-# Models
-facenet-pytorch>=2.6.0
-hsemotion>=0.3.0
-# ★ 호환성 핵심
-timm==0.8.19.dev0  # HSEmotion의 timm 버전과 일치
+# Pose/face 등 비전 분석에 흔히 쓰이는 라이브러리
+mediapipe>=0.10
+
+ultralytics>=8.0
+
+deepface>=0.0.75
