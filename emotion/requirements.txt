@@ -1,0 +1,10 @@
+# HSEmotion 측 요구사항에 맞춰 timm 버전을 고정하는 것을 권장
+# (원 스니펫 주석: pip install --upgrade "timm==0.8.19.dev0")
+
+torch>=2.0.0
+facenet-pytorch>=2.6.0
+hsemotion>=0.3.0
+opencv-python>=4.8.0
+matplotlib>=3.7.0
+numpy>=1.24.0
+timm==0.8.19.dev0
