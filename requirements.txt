@@ -1,12 +1,14 @@
-opencv-python
-numpy
-matplotlib
-deepface
-pillow
+# Core
+pandas>=2.2
+numpy>=1.26
 
-tf-keras
+# Image I/O & processing
+Pillow>=10.0
+opencv-python-headless>=4.9
 
-hsemotion
-facenet-pytorch
-torch
-torchvision
+# Pose/face 등 비전 분석에 흔히 쓰이는 라이브러리
+mediapipe>=0.10
+
+ultralytics>=8.0
+
+deepface>=0.0.75
