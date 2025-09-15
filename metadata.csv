@@ -1,6 +1,0 @@
-photo_id,num_people,gender_distribution,pose_type
-1,8,"{'male': 0, 'female': 5}",peace_sign
-2,8,"{'male': 0, 'female': 5}",peace_sign
-3,8,"{'male': 0, 'female': 5}",peace_sign
-4,27,"{'male': 0, 'female': 16}",no_person
-5,8,"{'male': 0, 'female': 5}",peace_sign
