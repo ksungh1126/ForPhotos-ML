@@ -23,9 +23,21 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--model-dir",
-        type=Path,
+        type=str,
         default=None,
-        help="Override the default local directory of the Qwen model",
+        help="Override the default vision-language model (HF repo id or local path)",
+    )
+    parser.add_argument(
+        "--music-kb",
+        type=str,
+        default=None,
+        help="Optional path to a JSON/CSV knowledge base for factual song metadata",
+    )
+    parser.add_argument(
+        "--music-embedder",
+        type=str,
+        default=None,
+        help="SentenceTransformer model id for semantic music retrieval (set empty to disable)",
     )
     parser.add_argument(
         "--device",
@@ -50,6 +62,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Use the fast image processor implementation (requires recent PyTorch)",
     )
+    parser.add_argument(
+        "--music-kb-top-k",
+        type=int,
+        default=None,
+        help="Number of top matches to surface from the music knowledge base",
+    )
     return parser
 
 
@@ -68,6 +86,12 @@ def run_cli(args: Optional[argparse.Namespace] = None) -> int:
         config_kwargs["temperature"] = parsed.temperature
     if parsed.use_fast_processor:
         config_kwargs["use_fast_image_processor"] = True
+    if parsed.music_kb:
+        config_kwargs["music_kb_path"] = parsed.music_kb
+    if parsed.music_embedder is not None:
+        config_kwargs["music_embedder_model"] = parsed.music_embedder or None
+    if parsed.music_kb_top_k is not None:
+        config_kwargs["music_kb_top_k"] = parsed.music_kb_top_k
 
     engine = RecommendationEngine(RecommendationConfig(**config_kwargs))
     request = RecommendationRequest(image_path=parsed.image, user_hint=parsed.hint)

@@ -5,14 +5,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
-_DEFAULT_MODEL_DIR = Path(__file__).resolve().parents[1] / "Qwen2.5-VL"
+_DEFAULT_VLM_MODEL_NAME = "Qwen/Qwen2.5-VL-7B-Instruct"
+_DEFAULT_MUSIC_DB_PATH = Path(__file__).resolve().with_name("music_db.json")
+_DEFAULT_MUSIC_EMBEDDER = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
 
 @dataclass
 class RecommendationConfig:
     """Settings for loading the Qwen model and shaping its outputs."""
 
-    model_dir: Path = field(default_factory=lambda: _DEFAULT_MODEL_DIR)
+    model_dir: str = field(default_factory=lambda: _DEFAULT_VLM_MODEL_NAME)
     device: Optional[str] = None
     max_new_tokens: int = 512
     temperature: float = 0.8
@@ -21,29 +23,31 @@ class RecommendationConfig:
     repetition_penalty: float = 1.02
     use_fast_image_processor: bool = False
     system_prompt: str = (
-        "당신은 소셜 미디어 콘텐츠 제작을 전문으로 하는 유용하고 트렌디한 어시스턴트입니다. "
-        "당신의 임무는 인생네컷 사진을 보고 그에 어울리는 SNS 캡션, 해시태그, 그리고 노래를 추천하는 것입니다. "
-        "캡션과 해시태그는 반드시 한국어로 작성해야 합니다. "
-        "추천하는 노래는 사진과 캡션의 분위기와 어울리는 유명한 K팝 또는 팝 트랙이어야 합니다."
+        "You are a fashionable social media assistant who turns photobooth images into viral-ready posts. "
+        "First craft a Korean SNS caption and hashtags that match the mood, then—on a separate step—recommend a fitting song."
     )
-    response_schema_hint: str = (
-        "반드시 다음 구조의 JSON 형식으로만 응답하세요:\n"
+    caption_user_prompt: str = (
+        "Look at the attached photobooth image. Based on the people, poses, facial expressions, and overall vibe, "
+        "suggest a concise yet punchy SNS caption plus 3-5 natural and popular hashtags."
+    )
+    caption_response_schema_hint: str = (
+        "Respond strictly with JSON in the following structure:\n"
         "{\n"
-        '  "sns_caption": "사진과 어울리는 창의적인 한글 문구",\n'
-        '  "hashtags": ["한글 해시태그1", "한글 해시태그2", "한글 해시태그3"],\n'
-        "  \"music\": {\n"
-        "    \"title\": \"사진과 어울리는 유명 K팝 또는 팝송의 정확한 공식 제목\",\n"
-        "    \"artist\": \"해당 곡의 정확한 공식 아티스트명\"\n"
-        "  }\n"
+        '  "sns_caption": "caption text",\n'
+        '  "hashtags": ["hashtag 1", "hashtag 2", "hashtag 3"]\n'
         "}\n"
-        "널리 알려진 곡만 추천하고, 제목과 아티스트가 실제 발매된 정보와 일치하는지 다시 확인하세요."
+        "Do not include the # symbol inside the list items; return pure Korean words."
+    )
+    music_kb_path: Optional[str] = field(default_factory=lambda: str(_DEFAULT_MUSIC_DB_PATH))
+    music_kb_top_k: int = 5
+    music_embedder_model: Optional[str] = field(default_factory=lambda: _DEFAULT_MUSIC_EMBEDDER)
+    music_rag_intro: str = (
+        "Ground your answer in the verified songs below. Prefer one of them if it matches the vibe, "
+        "or explain briefly why another famous track is a better fit."
     )
 
-
-    def resolve_device(self) -> str:
+    def _detect_device(self) -> str:
         """Return the device string to use for inference."""
-        if self.device:
-            return self.device
         try:
             import torch
 
@@ -55,5 +59,9 @@ class RecommendationConfig:
             pass
         return "cpu"
 
+    def resolve_device(self) -> str:
+        if self.device:
+            return self.device
+        return self._detect_device()
 
 __all__ = ["RecommendationConfig"]
