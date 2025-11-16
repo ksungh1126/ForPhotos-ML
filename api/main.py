@@ -38,7 +38,7 @@ app.include_router(filter.router, prefix="/api")
 app.include_router(split.router, prefix="/api")
 
 # 정적 파일 서빙 (프론트엔드)
-frontend_path = Path(__file__).parent.parent / "test_frontend"
+frontend_path = Path(__file__).parent.parent / "frontend_integrated"
 if frontend_path.exists():
     app.mount("/static", StaticFiles(directory=str(frontend_path)), name="static")
 
