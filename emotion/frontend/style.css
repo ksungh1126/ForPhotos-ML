@@ -1,0 +1,413 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Main */
+main {
+    padding: 40px 30px;
+}
+
+/* Upload Section */
+.upload-section {
+    margin-bottom: 30px;
+}
+
+.upload-area {
+    border: 3px dashed #ddd;
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    margin-bottom: 20px;
+}
+
+.upload-area:hover {
+    border-color: #667eea;
+    background: #f0f4ff;
+}
+
+.upload-area.drag-over {
+    border-color: #667eea;
+    background: #e8edff;
+    transform: scale(1.02);
+}
+
+.upload-placeholder {
+    color: #999;
+}
+
+.upload-placeholder svg {
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.upload-placeholder p {
+    font-size: 1.1rem;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+/* Input Group */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Buttons */
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 20px;
+}
+
+.btn-secondary:hover {
+    background: #667eea;
+    color: white;
+}
+
+.btn-copy {
+    padding: 8px 20px;
+    background: #f0f4ff;
+    color: #667eea;
+    border: 1px solid #667eea;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+}
+
+.btn-copy:hover {
+    background: #667eea;
+    color: white;
+}
+
+/* Loading */
+.loading-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-detail {
+    color: #999;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* Result Section */
+.result-section {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-card {
+    background: #fafafa;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.result-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Emoji Image */
+.emoji-image-container {
+    text-align: center;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.emoji-result-image {
+    max-width: 100%;
+    max-height: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Emotion Results */
+.emotion-summary {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.emotion-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+.emotion-item {
+    background: white;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid #667eea;
+}
+
+.emotion-label {
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.emotion-confidence {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Caption */
+.caption-box {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #333;
+    min-height: 80px;
+}
+
+/* Hashtags */
+.hashtag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hashtag {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Music */
+.music-box {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.music-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.music-icon {
+    font-size: 3rem;
+}
+
+.music-info h3 {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.music-info p {
+    color: #666;
+    font-size: 1rem;
+}
+
+.music-candidates {
+    margin-top: 15px;
+}
+
+.music-candidates h4 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.music-candidate-item {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-left: 3px solid #ddd;
+    font-size: 0.9rem;
+}
+
+.music-candidate-item:hover {
+    border-left-color: #667eea;
+    background: #f9f9f9;
+}
+
+/* Error */
+.error-section {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.error-box {
+    background: #fff3f3;
+    border: 2px solid #ff6b6b;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.error-box h3 {
+    color: #ff6b6b;
+    margin-bottom: 15px;
+}
+
+.error-box p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Footer */
+footer {
+    background: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    main {
+        padding: 30px 20px;
+    }
+
+    .emotion-list {
+        grid-template-columns: 1fr;
+    }
+}

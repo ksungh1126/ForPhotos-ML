@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForPhotos - AI 감정 분석 & SNS 추천</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📸 ForPhotos</h1>
+            <p class="subtitle">AI 기반 감정 분석 & SNS 콘텐츠 자동 생성</p>
+        </header>
+
+        <main>
+            <!-- 업로드 섹션 -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-placeholder">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>이미지를 드래그하거나 클릭하여 업로드</p>
+                        <input type="file" id="imageInput" accept="image/*" hidden>
+                    </div>
+                    <img id="previewImage" class="preview-image" style="display: none;">
+                </div>
+
+                <div class="input-group">
+                    <label for="hintInput">촬영 의도 또는 분위기 (선택)</label>
+                    <input
+                        type="text"
+                        id="hintInput"
+                        placeholder="예: 친구들과 즐거운 시간, 졸업 기념"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="confInput">최소 신뢰도 (0.0 ~ 1.0)</label>
+                    <input
+                        type="number"
+                        id="confInput"
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        value="0.15"
+                    >
+                </div>
+
+                <button id="analyzeBtn" class="btn-primary" disabled>
+                    분석 시작
+                </button>
+            </section>
+
+            <!-- 로딩 -->
+            <div id="loadingSection" class="loading-section" style="display: none;">
+                <div class="spinner"></div>
+                <p>AI가 이미지를 분석하고 있습니다...</p>
+                <p class="loading-detail">얼굴 감정 분석 및 SNS 콘텐츠 생성 중</p>
+            </div>
+
+            <!-- 결과 섹션 -->
+            <section id="resultSection" class="result-section" style="display: none;">
+                <!-- 이모지 합성 이미지 -->
+                <div id="emojiImageCard" class="result-card" style="display: none;">
+                    <h2>🎭 이모지 합성 결과</h2>
+                    <div class="emoji-image-container">
+                        <img id="emojiImage" class="emoji-result-image" alt="Emoji overlay result">
+                    </div>
+                    <button class="btn-copy" onclick="downloadEmojiImage()">이미지 다운로드</button>
+                </div>
+
+                <!-- 감정 분석 결과 -->
+                <div class="result-card">
+                    <h2>😊 감정 분석 결과</h2>
+                    <div id="emotionSummary" class="emotion-summary"></div>
+                    <div id="emotionList" class="emotion-list"></div>
+                </div>
+
+                <!-- SNS 추천 -->
+                <div class="result-card">
+                    <h2>✍️ SNS 캡션</h2>
+                    <div id="captionResult" class="caption-box"></div>
+                    <button class="btn-copy" onclick="copyCaption()">복사하기</button>
+                </div>
+
+                <!-- 해시태그 -->
+                <div class="result-card">
+                    <h2>#️⃣ 추천 해시태그</h2>
+                    <div id="hashtagResult" class="hashtag-container"></div>
+                    <button class="btn-copy" onclick="copyHashtags()">복사하기</button>
+                </div>
+
+                <!-- 음악 추천 -->
+                <div class="result-card">
+                    <h2>🎵 추천 음악</h2>
+                    <div id="musicResult" class="music-box"></div>
+                    <div id="musicCandidates" class="music-candidates"></div>
+                </div>
+
+                <button class="btn-secondary" onclick="reset()">
+                    다시 분석하기
+                </button>
+            </section>
+
+            <!-- 에러 섹션 -->
+            <div id="errorSection" class="error-section" style="display: none;">
+                <div class="error-box">
+                    <h3>⚠️ 오류 발생</h3>
+                    <p id="errorMessage"></p>
+                    <button class="btn-secondary" onclick="reset()">다시 시도</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>ForPhotos ML - Powered by HSEmotion & Qwen2.5-VL</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
