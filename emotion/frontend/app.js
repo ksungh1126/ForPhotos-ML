@@ -308,9 +308,30 @@ function reset() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// 엔진 타입 정보 가져오기
+async function loadEngineType() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/health`);
+        if (response.ok) {
+            const data = await response.json();
+            const engineTypeSpan = document.getElementById('engineType');
+            if (engineTypeSpan && data.engine_type) {
+                engineTypeSpan.textContent = data.engine_type;
+            }
+        }
+    } catch (error) {
+        console.error('엔진 타입 로드 실패:', error);
+        const engineTypeSpan = document.getElementById('engineType');
+        if (engineTypeSpan) {
+            engineTypeSpan.textContent = 'Unknown';
+        }
+    }
+}
+
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
     initEventListeners();
+    loadEngineType();
     console.log('ForPhotos 프론트엔드가 로드되었습니다.');
     console.log(`API 서버: ${API_BASE_URL}`);
 });

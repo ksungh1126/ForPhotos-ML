@@ -106,7 +106,17 @@ def health_check() -> dict:
     """Simple health probe."""
     analyzer_ready = get_emotion_analyzer() is not None
     recommender_ready = get_recommendation_engine() is not None
-    return {"status": "ok", "emotion_analyzer_ready": analyzer_ready, "recommender_ready": recommender_ready}
+
+    # 현재 사용 중인 추천 엔진 타입 반환
+    engine_type = "Gemini 2.5 Flash" if USE_GEMINI_API else "Qwen2.5-VL"
+
+    return {
+        "status": "ok",
+        "emotion_analyzer_ready": analyzer_ready,
+        "recommender_ready": recommender_ready,
+        "engine_type": engine_type,
+        "using_gemini": USE_GEMINI_API
+    }
 
 
 @app.post(

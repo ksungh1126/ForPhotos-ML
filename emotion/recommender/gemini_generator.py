@@ -83,29 +83,24 @@ class GeminiRecommendationEngine:
 
     def _build_prompt(self, user_hint: Optional[str] = None) -> str:
         """프롬프트 생성"""
-        base_prompt = """이 사진을 분석하여 SNS용 콘텐츠를 생성해주세요.
-
-다음 형식의 JSON으로 응답해주세요:
+        base_prompt = """이 사진을 분석하여 JSON으로 응답하세요:
 
 {
-  "sns_caption": "감성적이고 매력적인 SNS 캡션 (1-2문장, 한국어)",
-  "hashtags": ["해시태그1", "해시태그2", "해시태그3", "해시태그4", "해시태ag5"],
+  "sns_caption": "감성적인 SNS 캡션 (1-2문장)",
+  "hashtags": ["해시태그1", "해시태그2", "해시태그3", "해시태그4", "해시태그5"],
   "music": {
     "title": "추천 곡 제목",
-    "artist": "아티스트 이름",
-    "reason": "추천 이유 (짧게)"
+    "artist": "아티스트 이름"
   }
 }
 
 요구사항:
-- 캡션: 사진의 분위기와 어울리는 감성적인 문구
-- 해시태그: 5-8개, 한국어와 영어 혼용 가능
-- 음악: 사진 분위기에 맞는 실제 존재하는 K-POP 또는 인기 곡 추천
-
-반드시 위 JSON 형식으로만 응답하세요."""
+- 캡션: 사진 분위기에 맞는 감성적 문구
+- 해시태그: 5-7개
+- 음악: 실제 존재하는 K-POP 또는 인기곡"""
 
         if user_hint:
-            base_prompt += f"\n\n추가 힌트: {user_hint}"
+            base_prompt += f"\n\n힌트: {user_hint}"
 
         return base_prompt
 
@@ -128,7 +123,8 @@ class GeminiRecommendationEngine:
             }],
             "generationConfig": {
                 "temperature": 0.7,
-                "maxOutputTokens": 512,
+                "maxOutputTokens": 2048,
+                "responseMimeType": "application/json"
             }
         }
 
@@ -147,7 +143,22 @@ class GeminiRecommendationEngine:
 
         # 응답 파싱
         try:
-            text_response = result["candidates"][0]["content"]["parts"][0]["text"]
+            # 응답 구조 확인
+            if "candidates" not in result or len(result["candidates"]) == 0:
+                raise Exception(f"응답에 candidates가 없습니다: {result}")
+
+            candidate = result["candidates"][0]
+
+            # finishReason 확인
+            finish_reason = candidate.get("finishReason", "")
+            if finish_reason == "MAX_TOKENS":
+                raise Exception("응답이 토큰 제한으로 잘렸습니다. 더 짧은 프롬프트를 사용하거나 maxOutputTokens를 늘려주세요.")
+
+            # content.parts 확인
+            if "content" not in candidate or "parts" not in candidate["content"]:
+                raise Exception(f"응답에 content.parts가 없습니다: {candidate}")
+
+            text_response = candidate["content"]["parts"][0]["text"]
 
             # JSON 추출 (마크다운 코드 블록 제거)
             json_match = re.search(r'```json\s*(.*?)\s*```', text_response, re.DOTALL)
@@ -155,7 +166,7 @@ class GeminiRecommendationEngine:
                 json_str = json_match.group(1)
             else:
                 # 코드 블록이 없으면 전체를 JSON으로 파싱 시도
-                json_str = text_response
+                json_str = text_response.strip()
 
             data = json.loads(json_str)
 
