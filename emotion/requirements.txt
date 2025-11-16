@@ -19,3 +19,8 @@ sentence-transformers>=2.6.0
 requests>=2.31.0
 python-dotenv>=1.0.0
 tf-keras
+
+# Pose 분석 API까지 사용하려면 다음 추가 의존성이 필요합니다.
+mediapipe>=0.10
+ultralytics>=8.0
+deepface>=0.0.75
