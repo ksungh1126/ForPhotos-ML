@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForPhotos-ML - 통합 사진 분석 시스템</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📸 ForPhotos-ML</h1>
+            <p class="subtitle">AI 기반 포토부스 사진 분석 및 처리 시스템</p>
+        </header>
+
+        <!-- 탭 메뉴 -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="emotion">😊 감정 분석</button>
+            <button class="tab-button" data-tab="pose">🧍 포즈 분석</button>
+            <button class="tab-button" data-tab="filter">🎨 이미지 필터</button>
+            <button class="tab-button" data-tab="split">✂️ 스트립 분할</button>
+        </div>
+
+        <!-- 감정 분석 탭 -->
+        <div id="emotion-tab" class="tab-content active">
+            <h2>감정 분석 및 SNS 추천</h2>
+            <div class="upload-section">
+                <div class="upload-area" id="emotion-upload">
+                    <div class="upload-placeholder">
+                        <p>📷 이미지를 드래그하거나 클릭하여 업로드</p>
+                        <input type="file" id="emotion-input" accept="image/*" hidden>
+                    </div>
+                    <img id="emotion-preview" style="display:none;">
+                </div>
+                <div class="controls">
+                    <label>
+                        힌트 (선택):
+                        <input type="text" id="emotion-hint" placeholder="예: 친구들과 즐거운 시간">
+                    </label>
+                    <label>
+                        최소 신뢰도:
+                        <input type="number" id="emotion-conf" value="0.15" min="0" max="1" step="0.05">
+                    </label>
+                    <button id="emotion-analyze-btn" class="btn-primary" disabled>분석 시작</button>
+                </div>
+            </div>
+            <div id="emotion-loading" class="loading" style="display:none;">
+                <div class="spinner"></div>
+                <p>감정 분석 중...</p>
+            </div>
+            <div id="emotion-result" style="display:none;">
+                <!-- 결과가 여기에 표시됩니다 -->
+            </div>
+        </div>
+
+        <!-- 포즈 분석 탭 -->
+        <div id="pose-tab" class="tab-content">
+            <h2>포즈 및 사람 수 분석</h2>
+            <div class="upload-section">
+                <div class="upload-area" id="pose-upload">
+                    <div class="upload-placeholder">
+                        <p>📷 이미지를 드래그하거나 클릭하여 업로드</p>
+                        <input type="file" id="pose-input" accept="image/*" hidden>
+                    </div>
+                    <img id="pose-preview" style="display:none;">
+                </div>
+                <div class="controls">
+                    <button id="pose-analyze-btn" class="btn-primary" disabled>분석 시작</button>
+                </div>
+            </div>
+            <div id="pose-loading" class="loading" style="display:none;">
+                <div class="spinner"></div>
+                <p>포즈 분석 중...</p>
+            </div>
+            <div id="pose-result" style="display:none;">
+                <!-- 결과가 여기에 표시됩니다 -->
+            </div>
+        </div>
+
+        <!-- 이미지 필터 탭 -->
+        <div id="filter-tab" class="tab-content">
+            <h2>이미지 필터 적용</h2>
+            <div class="upload-section">
+                <div class="upload-area" id="filter-upload">
+                    <div class="upload-placeholder">
+                        <p>📷 이미지를 드래그하거나 클릭하여 업로드</p>
+                        <input type="file" id="filter-input" accept="image/*" hidden>
+                    </div>
+                    <img id="filter-preview" style="display:none;">
+                </div>
+                <div class="controls">
+                    <label>
+                        필터 선택:
+                        <select id="filter-type">
+                            <option value="sepia">세피아</option>
+                            <option value="grayscale">흑백</option>
+                            <option value="vintage">빈티지</option>
+                            <option value="original">원본</option>
+                        </select>
+                    </label>
+                    <button id="filter-apply-btn" class="btn-primary" disabled>필터 적용</button>
+                </div>
+            </div>
+            <div id="filter-loading" class="loading" style="display:none;">
+                <div class="spinner"></div>
+                <p>필터 적용 중...</p>
+            </div>
+            <div id="filter-result" style="display:none;">
+                <img id="filter-result-img">
+                <button id="filter-download-btn" class="btn-secondary">다운로드</button>
+            </div>
+        </div>
+
+        <!-- 스트립 분할 탭 -->
+        <div id="split-tab" class="tab-content">
+            <h2>포토부스 스트립 분할</h2>
+            <div class="upload-section">
+                <div class="upload-area" id="split-upload">
+                    <div class="upload-placeholder">
+                        <p>📷 4컷 스트립 이미지를 드래그하거나 클릭하여 업로드</p>
+                        <input type="file" id="split-input" accept="image/*" hidden>
+                    </div>
+                    <img id="split-preview" style="display:none;">
+                </div>
+                <div class="controls">
+                    <button id="split-btn" class="btn-primary" disabled>분할 시작</button>
+                </div>
+            </div>
+            <div id="split-loading" class="loading" style="display:none;">
+                <div class="spinner"></div>
+                <p>스트립 분할 중...</p>
+            </div>
+            <div id="split-result" style="display:none;">
+                <div id="split-cuts"></div>
+                <button id="split-download-zip-btn" class="btn-secondary">ZIP 다운로드</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>ForPhotos-ML v1.0.0 | <a href="/docs" target="_blank">API 문서</a></p>
+            <p id="engine-indicator" class="engine-info">추천 엔진 상태 확인 중...</p>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

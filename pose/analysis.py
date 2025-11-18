@@ -7,8 +7,10 @@ from deepface import DeepFace
 import cv2
 import math
 import mediapipe as mp
+from pathlib import Path
 
 mp_pose = mp.solutions.pose
+YOLO_MODEL_PATH = Path(__file__).resolve().parent / "yolov8n.pt"
 
 # ──공용 헬퍼 ─────────────────────────────────────────────
 def _xy(lm):
@@ -146,7 +148,7 @@ def get_pose_type(image_path):
         return classify_pose(results.pose_landmarks.landmark)
 
 def get_num_people(image_path):
-    model = YOLO('yolov8n.pt')
+    model = YOLO(str(YOLO_MODEL_PATH))
     results = model(image_path)
     return len([obj for obj in results[0].boxes.cls if int(obj) == 0])
 

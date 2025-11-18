@@ -1,0 +1,11 @@
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+*/Qwen2.5-VL/
+
+# Environment variables
+.env
+*.env
+!.env.example
